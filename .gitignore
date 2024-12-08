@@ -1,3 +1,5 @@
 .env
 transformers_env/
+chroma_db/
+docs/
 videos/
