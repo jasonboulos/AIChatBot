@@ -6,7 +6,10 @@ import whisper
 from bs4 import BeautifulSoup
 from langchain.schema import Document
 import requests
+import re
 import os
+import unicodedata
+
 
 class DataFactory:
 
@@ -33,7 +36,16 @@ class DataFactory:
 
         return documents
     
-   
+    @staticmethod
+    def normalize_text(text):
+        return unicodedata.normalize("NFKC", text)
+    @staticmethod
+    def clean_text(text):
+        text = re.sub(r"´ e", "é", text)
+        text = re.sub(r"` a", "à", text)
+        text = re.sub(r"´ ee", "ée", text)
+        text = re.sub(r"\s+", " ", text)  # Remove extra spaces
+        return text
     @staticmethod
     def collectDataFromPdf(paths):
         """
@@ -47,7 +59,21 @@ class DataFactory:
             try:
                 loader = PyPDFLoader(path)
                 docs = loader.load()
-                documents.extend(docs) 
+                print(f"docs: {len(docs)}")
+                normalized_docs = [
+                    Document(
+                        page_content=DataFactory.normalize_text(doc.page_content),
+                        metadata=doc.metadata  # Preserve metadata
+                    ) for doc in docs
+                ]
+
+                cleaned_docs = [
+                    Document(
+                        page_content=DataFactory.clean_text(doc.page_content),
+                        metadata=doc.metadata  # Preserve metadata
+                    ) for doc in normalized_docs
+                ]
+                documents.extend(cleaned_docs)
                 DataFactory.logger.info(f"Successfully loaded data from {path}")
             except Exception as e:
                 DataFactory.logger.error(f"Error loading data from {path}: {e}")

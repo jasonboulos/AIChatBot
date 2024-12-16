@@ -9,11 +9,10 @@ from DataFactory import DataFactory
 class VectorStore:
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, embeddingModelName, persist_directory, urls=None, pdfpaths=None, chunk_size = 500,chunk_overlap = 75,reset_db=False):
+    def __init__(self, embeddingModel, persist_directory, urls=None, pdfpaths=None, chunk_size = 500,chunk_overlap = 75,reset_db=False):
         self.docs = []
         self.newDocs = []
-        self.embeddingModelName = embeddingModelName
-        self.embeddingModel = HuggingFaceEmbeddings(model_name=embeddingModelName)
+        self.embeddingModel = embeddingModel
         self.persist_directory = persist_directory
         self.splits = None
         self.logger = logging.getLogger("VectorStore")
@@ -26,7 +25,7 @@ class VectorStore:
 
         if urls or pdfpaths:
             self.collectData(urls, pdfpaths)
-            self.newDocs = []
+
         
 
     def resetDatabase(self):
@@ -51,6 +50,8 @@ class VectorStore:
             valid_pdfPaths = [path for path in pdfpaths if path.strip()]
             pdfdocsdata = DataFactory.collectDataFromPdf(valid_pdfPaths)
             self.docs.extend(pdfdocsdata)
+            if not self.docs:
+                raise ValueError("No docs generated from the documents.")
             self.newDocs.extend(pdfdocsdata)
 
     def initializeVectorDB(self):
@@ -62,13 +63,15 @@ class VectorStore:
         if os.path.exists(self.persist_directory) and os.listdir(self.persist_directory):
             self.logger.info("Loading existing Chroma database...")
             self.vectorDB = Chroma(persist_directory=self.persist_directory, embedding_function=self.embeddingModel)
+            if self.newDocs:
+                self.saveData()
         else:
             self.logger.info("Creating a new Chroma database...")
-            # Split documents into chunks
             self.splits = DataFactory.splitDocuments(self.docs, chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap)
-            
-            # Create vector database
+            if not self.splits:
+                raise ValueError("No splits generated from the documents.")          
             self.vectorDB = Chroma.from_documents(self.splits, self.embeddingModel, persist_directory=self.persist_directory)
+            self.newDocs = []
 
     def saveData(self):
         """

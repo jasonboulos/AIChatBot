@@ -1,40 +1,44 @@
 from ChatBot import ChatBot
 from VectorStore import VectorStore
-from DataFactory import DataFactory
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.chains import RetrievalQA
+import os
+from dotenv import load_dotenv, find_dotenv
+
+_ = load_dotenv(find_dotenv())
+OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 
 pdf_base_directory = './docs/pdfData/HAS/'
 DB_directory = './chroma_db'
-pdfpaths = DataFactory.get_all_pdf_paths(pdf_base_directory)
+# pdfpaths = DataFactory.get_all_pdf_paths(pdf_base_directory)
 
 vector_store = VectorStore(
-    embeddingModelName="distiluse-base-multilingual-cased-v1",
-    persist_directory= DB_directory,
-    pdfpaths=["./docs/pdfData/HAS/Insuffisance_Cardiaque_Has.pdf","./docs/pdfData/HAS/insufcard.pdf"],
-    reset_db=True
+    embeddingModel=OpenAIEmbeddings(),
+    persist_directory= DB_directory
 )
 
 vector_store.initializeVectorDB()
 
-
 print(vector_store.vectorDB._collection.count())
 
 chatbot = ChatBot(
-    vectorStore=vector_store,
-    model_name="bigscience/bloom-560m",
-    tokenizerName="bigscience/bloom-560m",
-    search_kwargs=2
+    vector_store=vector_store,
+    api_key= OPENAI_API_KEY
 )
+
 while True:
-        question = input("Your question: ")
-        
-        if question.lower() == 'exit':
-            print("Exiting the program. Goodbye!")
-            break
+    question = input("Your question: ")
+    if question.lower() == 'exit':
+        print("Exiting the program. Goodbye!")
+        break
 
-        # Process the question (you can replace this with actual logic to handle questions)
-        response = chatbot.generate_response(question)
-        print(f"Answer: {response}\n")
-
+    # Generate response
+    try:
+        result = chatbot.generate_response(question)
+        print(f"Answer: {result}\n")
+        # Optional: Print source documents for debugging
+    except Exception as e:
+        print(f"Error: {e}\n")
 
 
 
