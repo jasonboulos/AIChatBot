@@ -1,6 +1,15 @@
 from ChatBot import ChatBot
 from VectorStore import VectorStore
+<<<<<<< Updated upstream
 from DataFactory import DataFactory
+=======
+from langchain_openai import OpenAIEmbeddings
+import os
+from dotenv import load_dotenv, find_dotenv
+
+_ = load_dotenv(find_dotenv())
+OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+>>>>>>> Stashed changes
 
 pdf_base_directory = './docs/pdfData/HAS/'
 DB_directory = './chroma_db'
@@ -25,6 +34,7 @@ chatbot = ChatBot(
     search_kwargs=2
 )
 while True:
+<<<<<<< Updated upstream
         question = input("Your question: ")
         
         if question.lower() == 'exit':
@@ -34,6 +44,13 @@ while True:
         # Process the question (you can replace this with actual logic to handle questions)
         response = chatbot.generate_response(question)
         print(f"Answer: {response}\n")
+=======
+    question = input("Your question: ")
+    if question.lower() == 'exit':
+        chatbot.clear_history()
+        print("Exiting the program. Goodbye!")
+        break
+>>>>>>> Stashed changes
 
 
 
