@@ -17,13 +17,13 @@ class AnswerResponse(BaseModel):
     answer: str
 
 app = FastAPI()
-DB_directory = './docs/chroma_db/'
+DB_directory = './chroma_db/'
 
 vector_store = VectorStore(embeddingModel=OpenAIEmbeddings(),persist_directory=DB_directory)
 vector_store.initializeVectorDB()
 chatbot = ChatBot(vector_store = vector_store,api_key= OPENAI_API_KEY)
 
-app.get("/")
+@app.get("/")
 def health_check():
     try:
         if chatbot:
@@ -33,7 +33,7 @@ def health_check():
     except Exception as e:
         return {"status": "error", "details": str(e)}
 
-app.post("/ask",response_model=AnswerResponse)
+@app.post("/ask",response_model=AnswerResponse)
 def ask_question(request : QuestionRequest):
     try:
 

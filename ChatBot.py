@@ -31,7 +31,9 @@ class ChatBot:
             openai.api_key = self.api_key
             self.llm = ChatOpenAI(model_name = self.model_name, temperature= self.temperature)
             self.logger.info(f"LLM Model '{self.model_name}' successfully loaded.")
-            # self.memory = ConversationBufferMemory(memory_key = "Chat_history",return_messages = True)
+            self.memory = ConversationBufferMemory(memory_key = "Chat_history",return_messages = True)
+            # Ce que lui il a fait au debut, il faut changer aussi le self.chain dans generate response (enleve self.chat_history)
+            # self.chain = ConversationalRetrievalChain.from_llm(self.llm, retriever = self.retriever, memory = self.memory)
             self.chain = ConversationalRetrievalChain.from_llm(self.llm, retriever = self.retriever, combine_docs_chain_kwargs = {"prompt" : custom_prompt})
             self.logger.info("chain creaeted successfully.")    
         except Exception as e:
@@ -40,9 +42,9 @@ class ChatBot:
     def generate_response(self, question):
         if question:
             try:
+                self.logger.info(f"Chat history before chain: {self.chat_history}")
                 result = self.chain({"question": question, "chat_history": self.chat_history})
-                self.chat_history.append([(question, result["answer"])])
-                self.logger.info(self.chat_history)
+                self.chat_history.extend([(question, result["answer"])])
                 self.logger.info("Result generated successfully")
                 return result["answer"]
             except Exception as e:
