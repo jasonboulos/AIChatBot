@@ -1,8 +1,11 @@
 from ChatBot import ChatBot
 from VectorStore import VectorStore
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 from DataFactory import DataFactory
 =======
+=======
+>>>>>>> Stashed changes
 from langchain_openai import OpenAIEmbeddings
 import os
 from dotenv import load_dotenv, find_dotenv
