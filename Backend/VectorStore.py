@@ -1,8 +1,6 @@
 import os
 import shutil
-from langchain_community.llms import HuggingFacePipeline
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
 import logging
 from DataFactory import DataFactory
 

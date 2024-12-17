@@ -1,5 +1,4 @@
-.env
-transformers_env/
-chroma_db/
-docs/
-videos/
+/Backend/.env
+/Backend/test_env
+/Backend/chroma_db
+/Backend/docs
