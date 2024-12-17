@@ -2,3 +2,5 @@
 /Backend/test_env
 /Backend/chroma_db
 /Backend/docs
+/Backend/*.pyc
+/Backend/__pycache__/
