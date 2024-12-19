@@ -1,0 +1,38 @@
+<div class="d-flex flex-column vh-100 border-end" style="width: 300px; background-color: #f8f9fa;">
+    <!-- Top Section with Buttons -->
+    <div class="d-flex justify-content-end align-items-center p-2 border-bottom">
+      <button class="btn btn-primary btn-sm" (click)="createNewChat()">
+        + New Chat
+      </button>
+    </div>
+  
+    <!-- List of Chats -->
+    <div class="flex-grow-1 overflow-auto p-2">
+      <div
+        class="d-flex justify-content-between align-items-center p-2 mb-2 rounded chat-item"
+        *ngFor="let chat of chatList; let i = index"
+        [class.active]="selectedChatIndex === i"
+        (click)="selectChat(i)"
+        style="cursor: pointer; background-color: white;"
+      >
+        <!-- Chat Title -->
+        <div class="text-truncate" style="max-width: 200px;">
+          {{ chat.title }}
+        </div>
+  
+        <!-- Options Button (Three Dots) -->
+        <button
+          class="btn btn-light btn-sm"
+          (click)="openOptions(i, $event)"
+        >
+          <i class="bi bi-three-dots"></i> <!-- Bootstrap Icons -->
+        </button>
+      </div>
+    </div>
+  
+    <!-- Placeholder for Future Buttons -->
+    <div class="border-top p-2 text-center">
+      <small>View plans</small>
+    </div>
+  </div>
+  
