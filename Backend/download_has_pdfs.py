@@ -122,9 +122,9 @@ all_urls = {
 }
 
 pdf_limits = {
-    "Medicaments": 67,  
-    "News": 67,       
-    "Recommendations": 66  
+    "Medicaments": 50,  
+    "News": 50,       
+    "Recommendations": 50
 }
 
 # Run the script for each section

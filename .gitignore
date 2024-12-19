@@ -4,3 +4,4 @@
 # /Backend/docs
 /Backend/*.pyc
 /Backend/__pycache__/
+/chatbot_env/

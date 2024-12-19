@@ -7,7 +7,7 @@ from DataFactory import DataFactory
 class VectorStore:
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, embeddingModel, persist_directory, urls=None, pdfpaths=None, chunk_size = 500,chunk_overlap = 75,reset_db=False):
+    def __init__(self, embeddingModel, persist_directory, urls=None, pdfpaths=None, chunk_size = 1000,chunk_overlap = 200,reset_db=False):
         self.docs = []
         self.newDocs = []
         self.embeddingModel = embeddingModel
