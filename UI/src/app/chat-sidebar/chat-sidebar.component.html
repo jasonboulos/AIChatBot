@@ -1,34 +1,60 @@
 <div class="d-flex flex-column h-100 border-end" style=" background-color: #f8f9fa;">
     <!-- Top Section with Buttons -->
-    <div class="d-flex justify-content-end align-items-center p-2 border-bottom">
+    <div class="d-flex justify-content-end align-items-center mb-3 p-2 border-bottom">
       <button class="btn btn-primary btn-sm" (click)="createNewChat()">
         + New Chat
       </button>
     </div>
   
     <!-- List of Chats -->
-    <div class="flex-grow-1 overflow-auto p-2">
+    <div  class="flex-grow-1 mt-4 overflow-auto p-4">
       <div
-        class="d-flex justify-content-between align-items-center p-2 mb-2 rounded chat-item"
+        class="d-flex justify-content-between align-items-center p-2 rounded chat-item"
         *ngFor="let chat of chatList; let i = index"
         [class.active]="selectedChatIndex === i"
         (click)="selectChat(i)"
-        style="cursor: pointer; background-color: white;"
+        [ngClass]="{'hovered': hoveredChatIndex === i}"
+        (mouseover)="hoveredChatIndex = i;"
+        (mouseleave)="hoveredChatIndex = null"
+   
       >
         <!-- Chat Title -->
         <div class="text-truncate" style="max-width: 200px;">
           {{ chat.title }}
         </div>
-  
+    
         <!-- Options Button (Three Dots) -->
-        <button
-          class="btn btn-light btn-sm"
-          (click)="openOptions(i, $event)"
-        >
-          <i class="bi bi-three-dots"></i> <!-- Bootstrap Icons -->
-        </button>
+        <div class="position-relative">
+          <!-- Hover text options -->
+          <div *ngIf="hoveredOptionIndex === i" style="z-index: 9999; top: -13px;" class="position-absolute start-0 translate-middle bg-light border p-2 rounded shadow-sm">
+            Options
+          </div>
+        
+          <img
+            (mouseover)="displayOptions(i)"
+            (mouseleave)="hideOptions()"
+            (click)="openOptions(i, $event)"
+            src="../../assets/dots.png"
+            style="cursor: pointer;"
+          />
+        </div>
+        
+          
+          <!-- Menu List (Rename & Delete) -->
+          <div *ngIf="openedOptionsIndex === i" class="position-absolute top-100 start-100 translate-middle bg-light border p-2 rounded shadow-sm">
+            <ul class="list-unstyled mb-0">
+              <li (click)="renameChat(i)">
+                <i class="bi bi-pencil"></i> Rename
+              </li>
+              <li (click)="deleteChat(i)">
+                <i class="bi bi-trash"></i> Delete
+              </li>
+            </ul>
+          </div>
+  
       </div>
     </div>
+    
   
     <!-- Placeholder for Future Buttons -->
     <div class="border-top p-2 text-center">

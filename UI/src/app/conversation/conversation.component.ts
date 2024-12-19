@@ -20,9 +20,13 @@ export class ConversationComponent implements OnInit {
         conversations: [],
         date: new Date()
       }
+      this.checkStatus();
     }
+    const health = this.chatService.checkStatus()
+    
     
   }
+  status: string | undefined;
   userQuestion: string = ''; // User input for question
   askQuestion() {
     if (!this.userQuestion.trim()) {
@@ -81,5 +85,15 @@ export class ConversationComponent implements OnInit {
     textarea.style.height = 'auto'; // Reset height
     textarea.style.height = `${textarea.scrollHeight}px`; // Adjust to content
   }
+  checkStatus() {
+    this.chatService.checkStatus().subscribe(
+      (response) => {
+        this.status = response.status;
+        console.log('Status:', this.status);
+      },
+      (error) => {
+        console.error('Error:', error);
+      }
+    );
+  }
 }
-

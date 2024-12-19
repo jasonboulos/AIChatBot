@@ -9,6 +9,8 @@ import { Chat } from 'src/model/model';
 })
 export class ChatSidebarComponent {
   selectedChatIndex: number | null = null;
+  hoveredChatIndex: number | null = null;
+  hoveredOptionIndex: number | null = null;
   chatList = this.chatService.getChats();
   @Output() chatSelected = new EventEmitter<number>();
 
@@ -34,5 +36,32 @@ export class ChatSidebarComponent {
   openOptions(index: number, event: MouseEvent) {
     event.stopPropagation();
     console.log(`Options for chat ${index}`);
+    this.openedOptionsIndex = index;
   }
+
+
+openedOptionsIndex: number | null = null;
+
+displayOptions(index: number): void {
+  this.hoveredOptionIndex = index;
+}
+
+hideOptions(): void {
+  this.hoveredOptionIndex = null;
+}
+changeColor(index: number): void {
+  this.hoveredChatIndex = index
+}
+
+
+renameChat(index: number): void {
+  // Logic to rename the chat
+  console.log(`Rename chat at index ${index}`);
+}
+
+deleteChat(index: number): void {
+  // Logic to delete the chat
+  console.log(`Delete chat at index ${index}`);
+}
+
 }

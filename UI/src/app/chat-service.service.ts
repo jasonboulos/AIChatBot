@@ -8,7 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ChatServiceService {
 
-  private apiUrl = 'http://127.0.0.1:8000/ask';
+  private askUrl = 'http://127.0.0.1:8000/ask';
+  private getUrl = 'http://127.0.0.1:8000/health'
   
   constructor(private http: HttpClient) { }
   private chats: Chat[] = [];
@@ -23,8 +24,11 @@ export class ChatServiceService {
     this.selectedChatSubject.next(newChat)
 
   }
+  checkStatus():Observable<{status:string}>{
+    return this.http.get<{status: string}>(this.getUrl);
+  }
   sendQuestion(question: string): Observable<{ answer: string }> {
-    return this.http.post<{ answer: string }>(this.apiUrl, { question }); 
+    return this.http.post<{ answer: string }>(this.askUrl, { question }); 
   }
   selectChat(index: number) {
     this.selectedChatSubject.next(this.chats[index]);
