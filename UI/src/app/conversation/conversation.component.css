@@ -1,0 +1,22 @@
+.send-button {
+    position: absolute;
+    bottom: 1px; /* Adjust as needed to align vertically */
+    right: 1px; /* Adjust as needed to align horizontally */
+    z-index: 10; /* Ensure it stays above the textarea */
+    padding: 5px 10px; /* Adjust padding for the button size */
+    border-radius: 50%; /* Optional: Make the button circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px; /* Adjust width for icon size */
+    height: 40px; /* Adjust height for icon size */
+/* Button background color */
+    color: white; /* Button text/icon color */
+    border: none; /* Remove button border */
+    cursor: pointer; /* Change cursor on hover */
+  }
+  
+  .send-button:hover {
+   opacity: 0.7;
+  }
+  

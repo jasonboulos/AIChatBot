@@ -1,6 +1,7 @@
 from ChatBot import ChatBot
 from VectorStore import VectorStore
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain.embeddings import OpenAIEmbeddings
 import os
@@ -12,18 +13,26 @@ OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 class QuestionRequest(BaseModel):
     question: str
 
+
 class AnswerResponse(BaseModel):
     question:str
     answer: str
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],  # Frontend origin
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 DB_directory = './chroma_db/'
 
 vector_store = VectorStore(embeddingModel=OpenAIEmbeddings(),persist_directory=DB_directory)
 vector_store.initializeVectorDB()
 chatbot = ChatBot(vector_store = vector_store,api_key= OPENAI_API_KEY)
 
-@app.get("/")
+@app.get("/health")
 def health_check():
     try:
         if chatbot:

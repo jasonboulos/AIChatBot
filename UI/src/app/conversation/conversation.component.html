@@ -1,0 +1,76 @@
+<div
+  class="d-flex flex-column col-6 mx-auto justify-content-between align-items-center vh-100 pt-5 "
+  *ngIf="selectedChat.conversations.length > 0; else emptyChat"
+>
+  <!-- Common Parent Container -->
+  <div class="container d-flex flex-column justify-content-center align-items-center w-100" style="height: 100%">
+    <!-- Chat History -->
+    <div class="border rounded shadow p-4 mb-3 flex-grow-1 w-100 overflow-y-auto" style="max-height: calc(100% - 80px)">
+      <div *ngFor="let convo of selectedChat.conversations" class="mb-3">
+        <!-- Question -->
+        <div class="d-flex justify-content-end">
+          <div class="p-2 bg-primary text-white rounded mb-1" style="max-width: 75%">
+            {{ convo.question }}
+          </div>
+        </div>
+        <!-- Answer -->
+        <div class="d-flex justify-content-start">
+          <div class="m-1">
+            <img src="../../assets/doctor.png" alt="Send" style="width: 30px; height: 30px" />
+          </div>
+          <div class="p-2 bg-secondary text-white rounded mb-1" style="max-width: 75%">
+            {{ convo.answer }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Input -->
+    <div class="border rounded shadow p-3 mb-4 w-100 position-relative">
+      <div class="input-group">
+        <textarea
+          class="form-control"
+          [(ngModel)]="userQuestion"
+          (keydown)="onKeyDown($event)"
+          placeholder="Posez votre question..."
+          (input)="adjustTextareaHeight($event)"
+          style="resize: none; border: none; overflow-y: auto; max-height: 150px"
+          rows="1"
+        ></textarea>
+
+        <!-- Send Button -->
+        <button class="btn send-button" style="width: 40px; height: 40px" (click)="askQuestion()">
+          <img src="../../assets/send.png" alt="Send" style="width: 30px; height: 30px" />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Display When Chat History is Empty -->
+<ng-template #emptyChat>
+  <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+    <!-- Message Above Input -->
+    <h3 class="mb-4 text-muted">How can I help?</h3>
+
+    <!-- User Input Positioned in the Center -->
+    <div class="border  rounded shadow p-3 mb-4  position-relative col-6">
+      <div class="input-group">
+        <textarea
+          class="form-control"
+          [(ngModel)]="userQuestion"
+          (keydown)="onKeyDown($event)"
+          placeholder="Posez votre question..."
+          (input)="adjustTextareaHeight($event)"
+          style="resize: none; border: none; overflow-y: auto; max-height: 150px"
+          rows="1"
+        ></textarea>
+
+        <!-- Send Button -->
+        <button class="btn send-button" style="width: 40px; height: 40px" (click)="askQuestion()">
+          <img src="../../assets/send.png" alt="Send" style="width: 30px; height: 30px" />
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
