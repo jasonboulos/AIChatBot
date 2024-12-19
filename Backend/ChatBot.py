@@ -8,7 +8,7 @@ class ChatBot:
     logging.basicConfig(level=logging.INFO)
     DEFAULT_PROMPT = """
         Tu es un chatbot médical spécialisé en insuffisance cardiaque. Ton rôle est d'aider les patients à diagnostiquer leur état, fournir des informations, et donner des conseils personnalisés. Si les informations fournies sont insuffisantes pour établir un diagnostic ou donner un conseil, pose des questions précises au patient pour recueillir plus de données. 
-
+'
         Réponds gentiment aux salutations ou questions simples (par exemple, "Bonjour", "Ça va"), mais ne réponds pas aux questions non liées à l'insuffisance cardiaque ou à son diagnostic. Analyse les informations données pour prendre une décision adaptée et termine chaque réponse par "Merci pour votre question !"
         
         Contexte : {context} 
@@ -20,7 +20,7 @@ class ChatBot:
 
 
 
-    def __init__(self, vector_store,api_key, search_kwargs = 3, temperature=0,promptTemplate = None, model_name = "gpt-4o"):
+    def __init__(self, vector_store,api_key, search_kwargs = 3, temperature=0,promptTemplate = None, model_name = "gpt-3.5-turbo"):
         self.model_name = model_name
         self.vectorStore = vector_store
         self.api_key = api_key

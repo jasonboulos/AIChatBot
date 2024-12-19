@@ -19,7 +19,6 @@ export class ChatSidebarComponent {
   // Create a new chat
   createNewChat() {
     const newChat : Chat = { title: 'New Chat',conversations :[], date: new Date() };
-
     this.chatService.saveChats(newChat);
 
   }
@@ -27,6 +26,7 @@ export class ChatSidebarComponent {
   // Select a chat
   selectChat(index: number) {
     this.selectedChatIndex = index;
+    this.chatService.selectChat(this.selectedChatIndex)
     this.chatSelected.emit(index);
   }
 

@@ -1,15 +1,16 @@
+<div class="m-3">HeartGPT</div>
 <div
-  class="d-flex flex-column col-6 mx-auto justify-content-between align-items-center vh-100 pt-5 "
+  class="d-flex flex-column col-6 mx-auto justify-content-between align-items-center h-100  "
   *ngIf="selectedChat.conversations.length > 0; else emptyChat"
 >
   <!-- Common Parent Container -->
   <div class="container d-flex flex-column justify-content-center align-items-center w-100" style="height: 100%">
     <!-- Chat History -->
-    <div class="border rounded shadow p-4 mb-3 flex-grow-1 w-100 overflow-y-auto" style="max-height: calc(100% - 80px)">
+    <div class="border rounded shadow p-4 mb-3 flex-grow-1 w-100 overflow-y-auto" style="max-height: calc(100% - 220px)">
       <div *ngFor="let convo of selectedChat.conversations" class="mb-3">
         <!-- Question -->
         <div class="d-flex justify-content-end">
-          <div class="p-2 bg-primary text-white rounded mb-1" style="max-width: 75%">
+          <div class="p-2 mb-2 bg-primary text-white rounded mb-1" style="max-width: 75%">
             {{ convo.question }}
           </div>
         </div>

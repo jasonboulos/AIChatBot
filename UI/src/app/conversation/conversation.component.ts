@@ -24,32 +24,19 @@ export class ConversationComponent implements OnInit {
     
   }
   userQuestion: string = ''; // User input for question
-  chat: Chat = {
-    title: 'Chat with Assistant',
-    conversations: [],
-    date: new Date(),
-  };
   askQuestion() {
     if (!this.userQuestion.trim()) {
       return; // Avoid empty questions
     }
     
     const userQuestion = this.userQuestion; // Store the user's question
-  
-    // Initialize the chat object if it doesn't exist
-    if(!this.selectedChat){
-      this.selectedChat = {
-        title:"Chat With Assistant",
-        conversations: [],
-        date: new Date()
-      }
-    }
-  
     // Push a new conversation into the chat's conversations list
     const newConversation = { question:userQuestion, answer: 'Typing...' };
     this.selectedChat.conversations.push(newConversation);
-  
-  
+
+    if(!this.chatService.getChats().includes(this.selectedChat)){
+      this.chatService.saveChats(this.selectedChat)
+    }
     // Simulate API response
     this.chatService.sendQuestion(userQuestion).subscribe({
       next: (response: { answer: string }) => {
@@ -86,7 +73,7 @@ export class ConversationComponent implements OnInit {
     }
   }
   addConversation(question: string, answer: string) {
-    this.chat.conversations.push({ question, answer });
+    this.selectedChat.conversations.push({ question, answer });
   }
 
   adjustTextareaHeight(event: Event) {

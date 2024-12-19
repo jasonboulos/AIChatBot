@@ -20,9 +20,11 @@ export class ChatServiceService {
   selectedChat$ = this.selectedChatSubject.asObservable();
   saveChats(newChat : Chat) {
     this.chats.push(newChat);
+    this.selectedChatSubject.next(newChat)
+
   }
   sendQuestion(question: string): Observable<{ answer: string }> {
-    return this.http.post<{ answer: string }>(this.apiUrl, { question });
+    return this.http.post<{ answer: string }>(this.apiUrl, { question }); 
   }
   selectChat(index: number) {
     this.selectedChatSubject.next(this.chats[index]);
