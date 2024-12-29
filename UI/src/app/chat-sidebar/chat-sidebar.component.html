@@ -37,11 +37,8 @@
             src="../../assets/dots.png"
             style="cursor: pointer;"
           />
-        </div>
-        
-          
-          <!-- Menu List (Rename & Delete) -->
-          <div *ngIf="openedOptionsIndex === i" class="position-absolute top-100 start-100 translate-middle bg-light border p-2 rounded shadow-sm">
+                  <!-- Menu List (Rename & Delete) -->
+          <div *ngIf="openedOptionsIndex === i"  class="position-absolute start-0 bg-light border p-2 rounded shadow-sm">
             <ul class="list-unstyled mb-0">
               <li (click)="renameChat(i)">
                 <i class="bi bi-pencil"></i> Rename
@@ -51,7 +48,7 @@
               </li>
             </ul>
           </div>
-  
+        </div>
       </div>
     </div>
     

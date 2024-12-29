@@ -37,6 +37,8 @@ while True:
     try:
         result = chatbot.generate_response(question)
         print(f"Answer: {result}\n")
+        title = chatbot.summarize_question(question)
+        print(f"Title : {title}")
         # Optional: Print source documents for debugging
     except Exception as e:
         print(f"Error: {e}\n")

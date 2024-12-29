@@ -3,6 +3,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 import openai
 
 class ChatBot:
@@ -18,6 +19,13 @@ class ChatBot:
         Question : {question}
         Réponse :
     """
+
+    SUMMARIZE_PROMPT = """
+    Résume la question ci-dessous en un titre clair et concis de 2 à 3 mots, tout en capturant son essence principale.
+
+    Question : {question}
+    Titre : 
+"""
 
     def __init__(self, vector_store, api_key, search_kwargs=3, temperature=0, prompt_template=None, model_name="gpt-3.5-turbo"):
         self.model_name = model_name
@@ -58,14 +66,27 @@ class ChatBot:
                 memory=self.memory,
                 combine_docs_chain_kwargs={"prompt": custom_prompt}
             )
-            self.logger.info("Chain created successfully.")
+            self.logger.info("Conversation Chain created successfully.")
+
+            summarize_prompt_template = PromptTemplate(
+            input_variables=["question"],
+            template= self.SUMMARIZE_PROMPT
+        )
+            self.summarize_chain = LLMChain(llm=self.llm, prompt=summarize_prompt_template)
+            self.logger.info("Summarized Chain created successfully.")
         except Exception as e:
             self.logger.error(f"Failed to initialize LLM Model '{self.model_name}': {e}")
-
+    def summarize_question(self, question):
+        try:
+            summary = self.summarize_chain.run({"question": question})
+            self.logger.info(f"Summarized question: {summary}")
+            return summary.strip()
+        except Exception as e:
+            self.logger.error(f"Error summarizing question: {e}")
+            return "Error summarizing question."
     def generate_response(self, question):
         if question:
             try:
-
                 self.logger.info(f"Chat history: {self.memory.chat_memory.messages}")
                 result = self.chain({"question": question})
                 self.logger.info("Result generated successfully.")
@@ -76,6 +97,8 @@ class ChatBot:
         else:
             return "Please provide your question."
 
+
+        
     def clear_history(self):
         self.memory.clear()  # Clears the conversation history
         self.logger.info("Chat history cleared.")

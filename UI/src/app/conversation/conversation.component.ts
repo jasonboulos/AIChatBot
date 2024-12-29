@@ -28,6 +28,7 @@ export class ConversationComponent implements OnInit {
   }
   status: string | undefined;
   userQuestion: string = ''; // User input for question
+
   askQuestion() {
     if (!this.userQuestion.trim()) {
       return; // Avoid empty questions
@@ -37,11 +38,23 @@ export class ConversationComponent implements OnInit {
     // Push a new conversation into the chat's conversations list
     const newConversation = { question:userQuestion, answer: 'Typing...' };
     this.selectedChat.conversations.push(newConversation);
-
-    if(!this.chatService.getChats().includes(this.selectedChat)){
-      this.chatService.saveChats(this.selectedChat)
+    
+    if (!this.chatService.getChats().includes(this.selectedChat) || this.selectedChat.title ==='NewChat') {
+      this.chatService.summarizeQuestion(userQuestion).subscribe({
+        next: (response: { title: string }) => {
+          const title = response.title;
+          this.selectedChat.title = title;
+          if(!this.chatService.getChats().includes(this.selectedChat)){
+            this.chatService.saveChats(this.selectedChat)
+            
+          } 
+        },
+        error: (error: any) => {
+          console.error('API call failed:', error);
+        }
+      });
     }
-    // Simulate API response
+    
     this.chatService.sendQuestion(userQuestion).subscribe({
       next: (response: { answer: string }) => {
         // Update the last conversation with the received answer

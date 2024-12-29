@@ -9,8 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 export class ChatServiceService {
 
   private askUrl = 'http://127.0.0.1:8000/ask';
-  private getUrl = 'http://127.0.0.1:8000/health'
-  
+  private getUrl = 'http://127.0.0.1:8000/health';
+  private summarizeUrl = 'http://127.0.0.1:8000/summarize';
   constructor(private http: HttpClient) { }
   private chats: Chat[] = [];
 
@@ -29,6 +29,10 @@ export class ChatServiceService {
   }
   sendQuestion(question: string): Observable<{ answer: string }> {
     return this.http.post<{ answer: string }>(this.askUrl, { question }); 
+  }
+
+  summarizeQuestion(question: string): Observable<{title: string}>{
+    return this.http.post<{title: string}>(this.summarizeUrl, {question});
   }
   selectChat(index: number) {
     this.selectedChatSubject.next(this.chats[index]);

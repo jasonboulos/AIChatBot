@@ -15,8 +15,12 @@ class QuestionRequest(BaseModel):
 
 
 class AnswerResponse(BaseModel):
-    question:str
+    question: str
     answer: str
+
+class TitleResponse(BaseModel):
+    question: str
+    title: str
 
 app = FastAPI()
 app.add_middleware(
@@ -51,3 +55,10 @@ def ask_question(request : QuestionRequest):
     except Exception as e:    
         raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
 
+@app.post("/summarize", response_model= TitleResponse)
+def generate_title(request : QuestionRequest):
+    try:
+        title = chatbot.summarize_question(request.question)
+        return TitleResponse(question=request.question, title=title)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {e}")

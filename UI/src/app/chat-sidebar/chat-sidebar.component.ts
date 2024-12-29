@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { ChatServiceService } from '../chat-service.service';
 import { Chat } from 'src/model/model';
 
@@ -13,14 +13,14 @@ export class ChatSidebarComponent {
   hoveredOptionIndex: number | null = null;
   chatList = this.chatService.getChats();
   @Output() chatSelected = new EventEmitter<number>();
-
+  
   constructor(private chatService: ChatServiceService) {
 
   }
 
   // Create a new chat
   createNewChat() {
-    const newChat : Chat = { title: 'New Chat',conversations :[], date: new Date() };
+    const newChat : Chat = { title: 'NewChat',conversations :[], date: new Date() };
     this.chatService.saveChats(newChat);
 
   }
@@ -49,11 +49,17 @@ displayOptions(index: number): void {
 hideOptions(): void {
   this.hoveredOptionIndex = null;
 }
+hideMenu():void{
+  this.openedOptionsIndex = null;
+}
 changeColor(index: number): void {
   this.hoveredChatIndex = index
 }
 
-
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent) {
+  this.hideMenu(); 
+}
 renameChat(index: number): void {
   // Logic to rename the chat
   console.log(`Rename chat at index ${index}`);
