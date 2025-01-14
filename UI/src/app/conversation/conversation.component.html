@@ -1,4 +1,5 @@
-<div class="m-3">HeartGPT</div>
+
+
 <div
   class="d-flex flex-column col-6 mx-auto justify-content-between align-items-center h-100  "
   *ngIf="selectedChat.conversations.length > 0; else emptyChat"
@@ -10,7 +11,9 @@
       <div *ngFor="let convo of selectedChat.conversations" class="mb-3">
         <!-- Question -->
         <div class="d-flex justify-content-end">
-          <div class="p-2 mb-2 bg-primary text-white rounded mb-1" style="max-width: 75%">
+          <div
+  class="p-2 mb-2 bg-primary text-white"
+  style="max-width: 75%; border-radius: 15px;">
             {{ convo.question }}
           </div>
         </div>
@@ -19,7 +22,9 @@
           <div class="m-1">
             <img src="../../assets/doctor.png" alt="Send" style="width: 30px; height: 30px" />
           </div>
-          <div class="p-2 bg-secondary text-white rounded mb-1" style="max-width: 75%">
+          <div
+          class="p-2 mb-2 bg-secondary text-white"
+          style="max-width: 75%; border-radius: 15px;">
             {{ convo.answer }}
           </div>
         </div>
@@ -51,11 +56,22 @@
 <!-- Display When Chat History is Empty -->
 <ng-template #emptyChat>
   <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+    <!-- Large Image -->
+    <div class="d-flex align-items-center mb-5 mr-4">
+      <img
+        src="../../assets/logogpt.png"
+        alt="GPT Logo"
+        style="width: 150px; height: 150px; margin-bottom: 10px;"
+      />
+      <p class="fw-bold fs-1 text-primary" style="font-size: 3rem;">GPT</p>
+
+    </div>
+
     <!-- Message Above Input -->
-    <h3 class="mb-4 text-muted">How can I help?</h3>
+    <h3 class="mb-4 text-muted">Comment puis-je vous aider ?</h3>
 
     <!-- User Input Positioned in the Center -->
-    <div class="border  rounded shadow p-3 mb-4  position-relative col-6">
+    <div class="border rounded shadow p-3 mb-4 position-relative col-6">
       <div class="input-group">
         <textarea
           class="form-control"
@@ -75,3 +91,4 @@
     </div>
   </div>
 </ng-template>
+

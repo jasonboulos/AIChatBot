@@ -21,8 +21,7 @@ export class ChatServiceService {
   selectedChat$ = this.selectedChatSubject.asObservable();
   saveChats(newChat : Chat) {
     this.chats.push(newChat);
-    this.selectedChatSubject.next(newChat)
-
+    this.selectedChatSubject.next(newChat);
   }
   checkStatus():Observable<{status:string}>{
     return this.http.get<{status: string}>(this.getUrl);

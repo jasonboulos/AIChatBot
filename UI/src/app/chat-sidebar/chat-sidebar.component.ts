@@ -20,10 +20,15 @@ export class ChatSidebarComponent {
 
   // Create a new chat
   createNewChat() {
-    const newChat : Chat = { title: 'NewChat',conversations :[], date: new Date() };
+    const newChat: Chat = { title: 'Nouvelle conversation', conversations: [], date: new Date() };
     this.chatService.saveChats(newChat);
-
+    this.chatList = this.chatService.getChats();
+    this.selectedChatIndex = this.chatList.length - 1; // Set to the last chat index
+    this.chatService.selectChat(this.selectedChatIndex);
+  
+    this.chatSelected.emit(this.selectedChatIndex);
   }
+  
 
   // Select a chat
   selectChat(index: number) {
