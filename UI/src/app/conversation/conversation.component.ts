@@ -16,13 +16,12 @@ export class ConversationComponent implements OnInit {
     });
     if(!this.selectedChat){
       this.selectedChat = {
-        title:"Chat With Assistant",
+        title:"Nouvelle Conversation",
         conversations: [],
         date: new Date()
       }
       this.checkStatus();
     }
-    const health = this.chatService.checkStatus()
     
     
   }
@@ -39,7 +38,7 @@ export class ConversationComponent implements OnInit {
     const newConversation = { question:userQuestion, answer: 'Typing...' };
     this.selectedChat.conversations.push(newConversation);
     
-    if (!this.chatService.getChats().includes(this.selectedChat) || this.selectedChat.title ==='NewChat') {
+    if (!this.chatService.getChats().includes(this.selectedChat) || this.selectedChat.title ==='Nouvelle conversation') {
       this.chatService.summarizeQuestion(userQuestion).subscribe({
         next: (response: { title: string }) => {
           const title = response.title;
@@ -48,6 +47,7 @@ export class ConversationComponent implements OnInit {
             this.chatService.saveChats(this.selectedChat)
             
           } 
+          this.chatService.setSelectedChat(this.selectedChat);
         },
         error: (error: any) => {
           console.error('API call failed:', error);

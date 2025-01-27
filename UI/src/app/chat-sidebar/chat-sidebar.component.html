@@ -30,39 +30,25 @@
         <div class="text-truncate" style="max-width: 200px;">
           {{ chat.title }}
         </div>
-    
-        <!-- Options Button (Three Dots) -->
-        <!-- <div class="position-relative">
-          <div *ngIf="hoveredOptionIndex === i" style="z-index: 9999; top: -13px;" class="position-absolute start-0 translate-middle bg-light border p-2 rounded shadow-sm">
-            Options
-          </div>
-        
-          <img
-            (mouseover)="displayOptions(i)"
-            (mouseleave)="hideOptions()"
-            (click)="openOptions(i, $event)"
-            src="../../assets/dots.png"
-            style="cursor: pointer;"
-          />
-
-          <div *ngIf="openedOptionsIndex === i"  class="position-absolute start-0 bg-light border p-2 rounded shadow-sm">
-            <ul class="list-unstyled mb-0">
-              <li (click)="renameChat(i)">
-                <i class="bi bi-pencil"></i> Rename
-              </li>
-              <li (click)="deleteChat(i)">
-                <i class="bi bi-trash"></i> Delete
-              </li>
-            </ul>
-          </div>
-        </div> -->
+        <button
+        class="btn btn-link p-0"
+        (click)="deleteChat(i); $event.stopPropagation();"
+        title="Delete"
+      >
+        <img
+          src="../../assets/deleteicon.png"
+          alt="Delete"
+          style="height: 20px; width: 20px;"
+        />
+      </button>
+      
       </div>
     </div>
     
   
     <!-- Placeholder for Future Buttons -->
     <div class="border-top p-2 text-center">
-      <small>View plans</small>
+      <small>Settings</small>
     </div>
   </div>
   

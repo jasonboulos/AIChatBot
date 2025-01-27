@@ -17,12 +17,13 @@ export class ChatServiceService {
   getChats() {
     return this.chats;
   }
-  private selectedChatSubject = new BehaviorSubject(this.chats[0]); // Default to first chat
+  private selectedChatSubject = new BehaviorSubject<Chat | null>(null); 
   selectedChat$ = this.selectedChatSubject.asObservable();
   saveChats(newChat : Chat) {
     this.chats.push(newChat);
     this.selectedChatSubject.next(newChat);
   }
+
   checkStatus():Observable<{status:string}>{
     return this.http.get<{status: string}>(this.getUrl);
   }
@@ -35,5 +36,9 @@ export class ChatServiceService {
   }
   selectChat(index: number) {
     this.selectedChatSubject.next(this.chats[index]);
+  }
+
+  setSelectedChat(chat: Chat) {
+    this.selectedChatSubject.next(chat);
   }
 }

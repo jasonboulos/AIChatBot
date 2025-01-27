@@ -12,10 +12,17 @@ export class ChatSidebarComponent {
   hoveredChatIndex: number | null = null;
   hoveredOptionIndex: number | null = null;
   chatList = this.chatService.getChats();
+  selectedChat: Chat | null = null;
   @Output() chatSelected = new EventEmitter<number>();
   
   constructor(private chatService: ChatServiceService) {
 
+  }
+  ngOnInit() {
+    this.chatList = this.chatService.getChats();
+    this.chatService.selectedChat$.subscribe((chat) => {
+      this.selectedChat = chat;
+    });
   }
 
   // Create a new chat
@@ -25,7 +32,6 @@ export class ChatSidebarComponent {
     this.chatList = this.chatService.getChats();
     this.selectedChatIndex = this.chatList.length - 1; // Set to the last chat index
     this.chatService.selectChat(this.selectedChatIndex);
-  
     this.chatSelected.emit(this.selectedChatIndex);
   }
   
@@ -70,9 +76,25 @@ renameChat(index: number): void {
   console.log(`Rename chat at index ${index}`);
 }
 
-deleteChat(index: number): void {
-  // Logic to delete the chat
-  console.log(`Delete chat at index ${index}`);
+deleteChat(index: number) {
+  // Remove the chat from the list
+  this.chatList.splice(index, 1);
+
+  // Handle selection of the next chat
+  if (this.chatList.length > 0) {
+    if (index > 0) {
+      // Select the chat before the deleted one
+      this.chatService.setSelectedChat(this.chatList[index - 1]);
+    } else {
+      // If the first chat was deleted, select the new first chat
+      this.chatService.setSelectedChat(this.chatList[0]);
+    }
+  } else {
+    // If no chats are left, clear the selection
+    this.selectedChat = null;
+
+  }
 }
+
 
 }
