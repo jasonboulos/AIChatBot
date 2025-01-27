@@ -9,13 +9,14 @@ from DataFactory import DataFactory
 _ = load_dotenv(find_dotenv())
 OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 
-pdf_base_directory = './docs/pdfData/HAS/'
+pdf_base_directory = './docs/droits/'
 DB_directory = './chroma_db'
-# pdfpaths = DataFactory.get_all_pdf_paths(pdf_base_directory)
+pdfpaths = DataFactory.get_all_pdf_paths(pdf_base_directory)
 
 vector_store = VectorStore(
     embeddingModel=OpenAIEmbeddings(),
     persist_directory= DB_directory,
+    reset_db=True,pdfpaths= pdfpaths
 )
 
 vector_store.initializeVectorDB()
