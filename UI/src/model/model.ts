@@ -1,13 +1,13 @@
-// Define a Conversation Interface
 export interface Conversation {
     question: string;
     answer: string;
+    sources: string[];
   }
   
-  // Define a Chat Interface
   export interface Chat {
     title: string;                    
-    conversations: Conversation[];    
+    conversations: Conversation[];   
+    showSources?: boolean; 
     date: Date;                       
   }
   

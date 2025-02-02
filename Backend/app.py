@@ -17,6 +17,7 @@ class QuestionRequest(BaseModel):
 class AnswerResponse(BaseModel):
     question: str
     answer: str
+    sources: list[str]
 
 class TitleResponse(BaseModel):
     question: str
@@ -50,8 +51,8 @@ def health_check():
 def ask_question(request : QuestionRequest):
     try:
 
-        answer = chatbot.generate_response(request.question)
-        return AnswerResponse(question= request.question, answer=answer)
+        response = chatbot.generate_response(request.question)
+        return AnswerResponse(question= request.question, answer=response["answer"],sources= response["sources"])
     except Exception as e:    
         raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
 

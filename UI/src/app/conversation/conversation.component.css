@@ -20,3 +20,115 @@
    opacity: 0.7;
   }
   
+/* Answer text styling */
+/* Keep existing .send-button styles */
+
+/* Answer text styling */
+.answer-text {
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Sources toggle */
+  .sources-toggle {
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s ease;
+    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .chat-container {
+    position: relative;
+    z-index: 1;
+    transition: z-index 0.3s ease;
+  }
+  
+  .chat-container.expanded {
+    z-index: 1000; /* Must be higher than other elements */
+  }
+  
+  .sources-toggle:hover {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+  }
+  
+  .bi-info-circle {
+    font-size: 0.8rem;
+  }
+  
+  /* Chat bubble container */
+  .chat-bubble {
+    position: relative;
+    background: #2d3748;
+    border-radius: 15px;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+  }
+  
+  /* Sources overlay - UPDATED POSITIONING */
+  .sources-overlay {
+    position: absolute;
+    top: calc(100% - 10px); /* Overlap with next messages */
+    left: 0;
+    right: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    border-radius: 0 0 15px 15px;
+    background: rgba(45, 55, 72, 0.97); /* Add alpha channel */
+    backdrop-filter: blur(2px); 
+    box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    z-index: 1001; /* Higher than parent */
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .sources-overlay.expanded {
+    max-height: 300px;
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+  }
+  
+  /* Source items styling */
+  .source-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .source-item {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+  
+  .source-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .bi-file-earmark-pdf {
+    color: #e63946;
+    font-size: 0.9rem;
+  }
+  
+  /* Ensure following chat items stay in place */
+  .conversation-container > div {
+    position: relative;
+    z-index: 1;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  

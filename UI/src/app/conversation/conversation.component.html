@@ -1,31 +1,46 @@
-
-
 <div
-  class="d-flex flex-column col-6 mx-auto justify-content-between align-items-center h-100  "
+  class="d-flex flex-column col-6 mx-auto justify-content-between align-items-center h-100"
   *ngIf="selectedChat.conversations.length > 0; else emptyChat"
 >
   <!-- Common Parent Container -->
   <div class="container d-flex flex-column justify-content-center align-items-center w-100" style="height: 100%">
     <!-- Chat History -->
     <div class="border rounded shadow p-4 mb-3 flex-grow-1 w-100 overflow-y-auto" style="max-height: calc(100% - 220px)">
-      <div *ngFor="let convo of selectedChat.conversations" class="mb-3">
+      <div *ngFor="let convo of selectedChat.conversations; let i = index" class="mb-3 chat-message-container" [class.z-above]="convo.showSources">
         <!-- Question -->
         <div class="d-flex justify-content-end">
-          <div
-  class="p-2 mb-2 bg-primary text-white"
-  style="max-width: 75%; border-radius: 15px;">
+          <div class="p-2 mb-2 question-bubble" style="max-width: 75%; border-radius: 15px;">
             {{ convo.question }}
           </div>
         </div>
+        
         <!-- Answer -->
         <div class="d-flex justify-content-start">
           <div class="m-1">
-            <img src="../../assets/doctor.png" alt="Send" style="width: 30px; height: 30px" />
+            <img src="../../assets/doctor.png" alt="Doctor" style="width: 30px; height: 30px" />
           </div>
-          <div
-          class="p-2 mb-2 bg-secondary text-white"
-          style="max-width: 75%; border-radius: 15px;">
-            {{ convo.answer }}
+          <div class="position-relative" style="max-width: 75%">
+            <div class="p-2 mb-2 bg-secondary text-white answer-bubble" style="border-radius: 15px;">
+              <div class="answer-text">{{ convo.answer }}</div>
+              
+              <!-- Sources toggle -->
+              <div *ngIf="convo.sources?.length" class="sources-toggle" (click)="toggleSources(convo)">
+                <i class="bi bi-info-circle me-1"></i>
+                <span class="toggle-text">
+                  {{ convo.showSources ? 'Masquer les sources' : 'Afficher les sources' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Sources overlay -->
+            <div class="sources-overlay" [class.expanded]="convo.showSources">
+              <div class="source-items">
+                <div *ngFor="let source of convo.sources" class="source-item">
+                  <i class="bi bi-file-earmark-pdf me-2"></i>
+                  <span>{{ formatSourceName(source) }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -44,7 +59,6 @@
           rows="1"
         ></textarea>
 
-        <!-- Send Button -->
         <button class="btn send-button" style="width: 40px; height: 40px" (click)="askQuestion()">
           <img src="../../assets/send.png" alt="Send" style="width: 30px; height: 30px" />
         </button>
@@ -52,6 +66,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Display When Chat History is Empty -->
 <ng-template #emptyChat>
@@ -92,3 +107,72 @@
   </div>
 </ng-template>
 
+
+<style>
+  /* Questions - Patient Side */
+  .question-bubble {
+    background: #2a4e6b !important;
+    color: white;
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  /* Answers - Medical Side */
+  .answer-bubble {
+    border-radius: 18px 18px 18px 4px;
+    background: #f8f9fa !important; 
+    color: #2a4e6b !important; 
+    border: 1px solid #e0ecf3;
+    box-shadow: 0 2px 8px rgba(42,78,107,0.1);
+  }
+
+  .answer-text {
+  color: #1a3650 !important; 
+  line-height: 1.7;
+  font-size: 0.95rem;
+  }
+  
+  /* Sources Overlay */
+  .sources-overlay {
+    color: #2a4e6b !important; 
+    background-color: rgba(255, 255, 255, 0.6)!important;
+    border: 1px solid #e0ecf3;
+    box-shadow: 0 8px 20px rgba(42,78,107,0.15);
+  }
+  
+  .source-item {
+    color: #1a3650 !important;
+    border-left: 3px solid #3A6B88;
+    transition: all 0.2s ease;
+  }
+  
+  .source-item:hover {
+    background: #F5F9FC !important;
+    transform: translateX(5px);
+  }
+  
+  .bi-file-earmark-pdf {
+    color: #D64545 !important; 
+  }
+  
+  
+  .answer-text {
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+  
+  .question-bubble {
+    font-weight: 500;
+  }
+  
+
+  .sources-toggle {
+    color: #3A6B88 !important;
+    font-weight: 500;
+  }
+  
+  .sources-toggle:hover {
+    color: #D64545 !important;
+  }
+  </style>

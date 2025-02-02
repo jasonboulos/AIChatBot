@@ -27,8 +27,8 @@ export class ChatServiceService {
   checkStatus():Observable<{status:string}>{
     return this.http.get<{status: string}>(this.getUrl);
   }
-  sendQuestion(question: string): Observable<{ answer: string }> {
-    return this.http.post<{ answer: string }>(this.askUrl, { question }); 
+  sendQuestion(question: string): Observable<{ answer: string , sources: string[]}> {
+    return this.http.post<{ answer: string , sources: string[]}>(this.askUrl, { question }); 
   }
 
   summarizeQuestion(question: string): Observable<{title: string}>{

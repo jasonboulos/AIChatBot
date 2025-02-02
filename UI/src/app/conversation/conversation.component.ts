@@ -35,7 +35,7 @@ export class ConversationComponent implements OnInit {
     
     const userQuestion = this.userQuestion; // Store the user's question
     // Push a new conversation into the chat's conversations list
-    const newConversation = { question:userQuestion, answer: 'Typing...' };
+    const newConversation = { question:userQuestion, answer: 'Typing...', sources: [] };
     this.selectedChat.conversations.push(newConversation);
     
     if (!this.chatService.getChats().includes(this.selectedChat) || this.selectedChat.title ==='Nouvelle conversation') {
@@ -56,10 +56,11 @@ export class ConversationComponent implements OnInit {
     }
     
     this.chatService.sendQuestion(userQuestion).subscribe({
-      next: (response: { answer: string }) => {
+      next: (response: { answer: string, sources: string[]}) => {
         // Update the last conversation with the received answer
         const lastMessageIndex = this.selectedChat.conversations.length - 1;
         this.selectedChat.conversations[lastMessageIndex].answer = response.answer;
+        this.selectedChat.conversations[lastMessageIndex].sources = response.sources;
     
         // Update the chat date
         this.selectedChat.date = new Date();
@@ -92,7 +93,16 @@ export class ConversationComponent implements OnInit {
   addConversation(question: string, answer: string) {
     this.selectedChat.conversations.push({ question, answer });
   }
-
+  formatSourceName(source: string): string {
+    // Clean up file names
+    return source
+      .replace(/\.pdf$/, '')
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+  toggleSources(convo: Chat) {
+    convo.showSources = !convo.showSources;
+  }
   adjustTextareaHeight(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;
     textarea.style.height = 'auto'; // Reset height

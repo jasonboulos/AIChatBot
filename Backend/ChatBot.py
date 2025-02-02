@@ -40,7 +40,12 @@ class ChatBot:
         )
 
         # Set up memory
-        self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+        self.memory = ConversationBufferMemory(
+            memory_key="chat_history",
+            return_messages=True,
+            input_key="question",
+            output_key="answer"
+            )
 
         # Define prompt
         self.prompt_template = prompt_template or self.DEFAULT_PROMPT
@@ -64,7 +69,10 @@ class ChatBot:
                 llm=self.llm,
                 retriever=self.retriever,
                 memory=self.memory,
-                combine_docs_chain_kwargs={"prompt": custom_prompt}
+                combine_docs_chain_kwargs={"prompt": custom_prompt},
+                return_source_documents=True,
+                get_chat_history=lambda h: h,
+                verbose=True  # Helps with debugging
             )
             self.logger.info("Conversation Chain created successfully.")
 
@@ -87,10 +95,18 @@ class ChatBot:
     def generate_response(self, question):
         if question:
             try:
-                self.logger.info(f"Chat history: {self.memory.chat_memory.messages}")
+                # self.logger.info(f"Chat history: {self.memory.chat_memory.messages}")
                 result = self.chain({"question": question})
                 self.logger.info("Result generated successfully.")
-                return result["answer"]
+
+                source_documents = result.get('source_documents', [])
+                sources = list(set([doc.metadata.get('source', 'Unknown source') for doc in source_documents]))
+                self.logger.info(f"Retrieved documents from sources: {sources}")
+
+                return {
+                    "answer": result["answer"],
+                    "sources": sources
+                }
             except Exception as e:
                 self.logger.error(f"Error processing question '{question}': {e}")
                 return "An error occurred while processing your question. Please try again later."
